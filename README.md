@@ -52,7 +52,7 @@ To run this project on your local machine:
 
 ## 📈 Status
 
-All the core functions for this project have been completed. If you happen to find any bugs, feel free to file an issue in this GitHub Repo.
+All the core functions for this project have been completed, except for mobile responsive view. If you happen to find any bugs, feel free to file an issue in this GitHub Repo.
 
 ## 🤝 Contributing
 
