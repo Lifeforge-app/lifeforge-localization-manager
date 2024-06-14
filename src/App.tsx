@@ -24,7 +24,7 @@ const LocaleAdmin = (): React.ReactElement => {
     );
 
     const res = await fetch(
-      `https://lifeforge-api-proxy.onrender.com/user/auth/verify`,
+      `${import.meta.env.VITE_API_HOST}/user/auth/verify`,
       {
         method: "POST",
         headers: {
@@ -87,7 +87,7 @@ const LocaleAdmin = (): React.ReactElement => {
             access the locale editor.
           </p>
           <a
-            href="https://lifeforge.thecodeblog.net"
+            href={import.meta.env.VITE_FRONTEND_URL}
             className="bg-teal-300 p-4 px-6 mt-16 rounded-md transition-all flex items-center justify-center gap-2 uppercase text-zinc-900 font-semibold hover:bg-teal-400 tracking-widest"
           >
             <Icon icon="tabler:hammer" className="text-2xl" />
