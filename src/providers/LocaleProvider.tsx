@@ -79,7 +79,7 @@ export default function LocaleProvider({
         acc[currentKey] = filterLocales(key, items[currentKey]);
       }
       return acc;
-    }, {});
+    }, {} as Record<string, any>);
   }
 
   function removeEmptyObject(obj: Record<string, any>) {

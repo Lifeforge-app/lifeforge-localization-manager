@@ -12,8 +12,6 @@
   "dependencies": {
     "@headlessui/react": "^2.0.4",
     "@iconify/react": "^5.0.1",
-    "@types/": "uidotdev/usehooks",
-    "@types/react-beautiful-dnd": "^13.1.8",
     "@uidotdev/usehooks": "^2.4.1",
     "autoprefixer": "^10.4.19",
     "axios": "^1.7.2",
