@@ -1,6 +1,6 @@
-<center><h1 align="center">📹 YouTube Video Summarized</h1></center>
+<center><h1 align="center">🛠️ Lifeforge. Localization Manager</h1></center>
 
-<p align="center">Utilize the power of AI and summarize any YouTube video with just a click of a button</p>
+<p align="center">A simple, yet powerful tool for managing translations in your Lifeforge personal management system</p>
 
 ## 🤔 The Problem
 
@@ -9,15 +9,18 @@ Managing translations across multiple languages in when developing the system ca
 - **Manual Tedium:**  Constantly updating translations in different files is time-consuming and error-prone.
 - **Costly Solutions:** Existing localization tools often come with hefty price tags, making them inaccessible for many users (including me).
 - **Lack of Flexibility:**  Some tools may not adapt well to the specific structure and needs of Lifeforge.
+- **Translation Expertise Required:**  Finding and managing professional translators can be expensive and time-consuming.
 
 ## ✨ The Solution: Lifeforge Localization Manager
 
 Lifeforge Localization Manager tackles these issues head-on with a streamlined, cost-effective, and customizable approach:
 
+- **Seamless Lifeforge Integration:** Access the Localization Manager directly within your Lifeforge system using single sign-on (SSO) for a smooth user experience.
 - **Streamlined Translation Management:** Easily add, edit, and organize translations for different languages in a centralized interface.
 - **Intuitive Interface:** User-friendly design with clear categories and search functionality makes navigation a breeze.
 - **Customizable:** Tailor categories to perfectly match the modules and sections of your Lifeforge system.
 - **Cost-Effective:**  A free and open-source alternative to expensive localization solutions, saving you money.
+- **Gemini API Integration:**  Leverage the power of the Gemini API to automatically translate text, saving you time and effort on manual translation tasks.
 - **Open Source:** Contribute and make it even better by adding features or fixing bugs.
 
 ## 📷 Screenshots
