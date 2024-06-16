@@ -22,6 +22,13 @@ function RenameKeyModal(): React.ReactElement {
       {
         oldKey: renameKeyModalOpen,
         newKey: newKey,
+      },
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization:
+            "Bearer " + document.cookie.split("token=")[1].split(";")[0],
+        },
       }
     );
 

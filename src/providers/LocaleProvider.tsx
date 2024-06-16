@@ -110,6 +110,13 @@ export default function LocaleProvider({
       `https://lifeforge-api-proxy.onrender.com/locales/update/${selectedLanguageRef.current}`,
       {
         data: localesRef.current,
+      },
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization:
+            "Bearer " + document.cookie.split("token=")[1].split(";")[0],
+        },
       }
     );
     alert("Saved!");
