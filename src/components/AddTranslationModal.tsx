@@ -35,17 +35,13 @@ function AddTranslationModal(): React.ReactElement {
       return;
     }
 
-    await axios.post(
-      "https://lifeforge-api-proxy.onrender.com/locales/add-entry",
-      data,
-      {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization:
-            "Bearer " + document.cookie.split("token=")[1].split(";")[0],
-        },
-      }
-    );
+    await axios.post("https://lifeforge-api-proxy.onrender.com/locales", data, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization:
+          "Bearer " + document.cookie.split("token=")[1].split(";")[0],
+      },
+    });
 
     setData({
       key: "",
@@ -112,7 +108,7 @@ function AddTranslationModal(): React.ReactElement {
         <div className="relative bg-zinc-800 rounded-md group">
           <Icon
             icon="uil:key-skeleton"
-            className="text-2xl text-zinc-500 shrink-0 group-focus-within:text-teal-300 transition-all absolute top-1/2 -translate-y-1/2 left-4"
+            className="text-2xl text-zinc-500 shrink-0 group-focus-within:text-lime-300 transition-all absolute top-1/2 -translate-y-1/2 left-4"
           />
           <input
             type="text"
@@ -121,11 +117,11 @@ function AddTranslationModal(): React.ReactElement {
               setData((prev) => ({ ...prev, key: e.target.value }))
             }
             placeholder="key.of.the.translation"
-            className="w-full bg-transparent p-4 px-14 tracking-wider placeholder-zinc-500 transition-all rounded-md focus:ring-2 focus:outline-none focus:ring-offset-zinc-900 focus:ring-offset-2 focus:ring-teal-300 caret-teal-300"
+            className="w-full bg-transparent p-4 px-14 tracking-wider placeholder-zinc-500 transition-all rounded-md focus:ring-2 focus:outline-none focus:ring-offset-zinc-900 focus:ring-offset-2 focus:ring-lime-300 caret-lime-300"
           />
           <button
             onClick={AIGenerate}
-            className="absolute right-2 top-1/2 -translate-y-1/2 text-teal-300 hover:bg-teal-300/10 p-2 rounded-md font-medium transition-all"
+            className="absolute right-2 top-1/2 -translate-y-1/2 text-lime-300 hover:bg-lime-300/10 p-2 rounded-md font-medium transition-all"
           >
             <Icon
               icon={aiGenerating ? "svg-spinners:3-dots-scale" : "mage:stars-c"}
@@ -140,19 +136,19 @@ function AddTranslationModal(): React.ReactElement {
           >
             <Icon
               icon={language.icon}
-              className="text-2xl text-zinc-500 shrink-0 group-focus-within:text-teal-300 transition-all absolute top-1/2 -translate-y-1/2 left-4"
+              className="text-2xl text-zinc-500 shrink-0 group-focus-within:text-lime-300 transition-all absolute top-1/2 -translate-y-1/2 left-4"
             />
             <input
               type="text"
               value={data.translations[language.id]}
               onChange={(e) => updateTranslation(language.id, e.target.value)}
               placeholder={`Translation for ${language.name}`}
-              className="w-full bg-transparent p-4 px-14 tracking-wider placeholder-zinc-500 transition-all rounded-md focus:ring-2 focus:outline-none focus:ring-offset-zinc-900 focus:ring-offset-2 focus:ring-teal-300 caret-teal-300"
+              className="w-full bg-transparent p-4 px-14 tracking-wider placeholder-zinc-500 transition-all rounded-md focus:ring-2 focus:outline-none focus:ring-offset-zinc-900 focus:ring-offset-2 focus:ring-lime-300 caret-lime-300"
             />
           </div>
         ))}
         <button
-          className="bg-teal-300 p-4 mt-6 rounded-md transition-all w-full flex items-center justify-center gap-2 uppercase text-zinc-900 font-semibold hover:bg-teal-400 tracking-widest"
+          className="bg-lime-300 p-4 mt-6 rounded-md transition-all w-full flex items-center justify-center gap-2 uppercase text-zinc-900 font-semibold hover:bg-lime-400 tracking-widest"
           onClick={() => {
             onSubmit();
           }}

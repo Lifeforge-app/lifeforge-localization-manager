@@ -25,9 +25,9 @@ function TranslationHeader({
   }
 
   return (
-    <div className="flex items-center w-full justify-between font-medium text-xl bg-teal-300/20 text-teal-300 p-4 pl-4 rounded-md mb-2">
+    <div className="flex items-center w-full justify-between font-medium text-xl bg-lime-300/20 text-lime-300 p-4 pl-4 rounded-md mb-2">
       <div className="flex items-center gap-3">
-        <div className="h-6 w-1 bg-teal-300 rounded-full" />
+        <div className="h-6 w-1 bg-lime-300 rounded-full" />
         <span>{item.text}</span>
       </div>
       <div className="flex items-center gap-2">
@@ -35,7 +35,7 @@ function TranslationHeader({
           onClick={() => {
             setRenameKeyModalOpen(item.text);
           }}
-          className="hover:bg-teal-300/20 transition-all p-2 rounded-md"
+          className="hover:bg-lime-300/20 transition-all p-2 rounded-md"
         >
           <Icon icon="tabler:edit" className="cursor-pointer" />
         </button>

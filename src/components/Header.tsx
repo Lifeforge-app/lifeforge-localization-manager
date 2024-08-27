@@ -6,7 +6,7 @@ function Header(): React.ReactElement {
     <>
       <Icon
         icon="hugeicons:translate"
-        className="text-8xl text-center mb-6 text-teal-300 mx-auto"
+        className="text-8xl text-center mb-6 text-lime-300 mx-auto"
       />
       <h1 className="text-center text-4xl mb-4 font-medium">
         Localization Manager

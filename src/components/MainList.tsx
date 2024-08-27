@@ -39,7 +39,7 @@ function MainList(): React.ReactElement {
       }
       collapsed
       renderCollapseIcon={({ isCollapsed }) => (
-        <button className="hover:bg-teal-300/20 transition-all p-2 rounded-md">
+        <button className="hover:bg-lime-300/20 transition-all p-2 rounded-md">
           <Icon
             icon={isCollapsed ? "tabler:chevron-down" : "tabler:chevron-up"}
             className="cursor-pointer"

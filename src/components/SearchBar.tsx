@@ -72,7 +72,7 @@ function SearchBar(): React.ReactElement {
                       <div
                         className={`p-4 cursor-pointer transition-all ${
                           selected
-                            ? "bg-teal-300 text-zinc-900 hover:bg-teal-400"
+                            ? "bg-lime-300 text-zinc-900 hover:bg-lime-400"
                             : "text-zinc-100 hover:bg-zinc-700/50"
                         }`}
                       >
@@ -100,7 +100,7 @@ function SearchBar(): React.ReactElement {
           />
         </search>
         <button
-          className="bg-teal-300 p-4 px-6 flex items-center gap-2 uppercase whitespace-nowrap rounded-md text-zinc-900 font-semibold transition-all tracking-widest hover:bg-teal-400"
+          className="bg-lime-300 p-4 px-6 flex items-center gap-2 uppercase whitespace-nowrap rounded-md text-zinc-900 font-semibold transition-all tracking-widest hover:bg-lime-400"
           onClick={() => {
             setAddTranslationModalOpen(true);
           }}

@@ -18,7 +18,7 @@ function RenameKeyModal(): React.ReactElement {
     }
 
     await axios.patch(
-      "https://lifeforge-api-proxy.onrender.com/locales/rename-key",
+      "https://lifeforge-api-proxy.onrender.com/locales",
       {
         oldKey: renameKeyModalOpen,
         newKey: newKey,
@@ -57,11 +57,11 @@ function RenameKeyModal(): React.ReactElement {
         <div className="relative w-full bg-zinc-800 rounded-md group">
           <Icon
             icon="uil:key-skeleton"
-            className="text-2xl text-zinc-500 shrink-0 group-focus-within:text-teal-300 transition-all absolute top-1/2 -translate-y-1/2 left-4"
+            className="text-2xl text-zinc-500 shrink-0 group-focus-within:text-lime-300 transition-all absolute top-1/2 -translate-y-1/2 left-4"
           />
           <input
             type="text"
-            className="bg-zinc-800 w-full p-4 pl-14 rounded-md transition-all focus:ring-2 focus:outline-none focus:ring-offset-zinc-900 focus:ring-offset-2 focus:ring-teal-300 caret-teal-300"
+            className="bg-zinc-800 w-full p-4 pl-14 rounded-md transition-all focus:ring-2 focus:outline-none focus:ring-offset-zinc-900 focus:ring-offset-2 focus:ring-lime-300 caret-lime-300"
             placeholder="Current Key"
             value={renameKeyModalOpen || ""}
             disabled
@@ -69,25 +69,25 @@ function RenameKeyModal(): React.ReactElement {
         </div>
         <Icon
           icon="uil:arrow-right"
-          className="text-2xl text-teal-300 shrink-0"
+          className="text-2xl text-lime-300 shrink-0"
         />
         <div className="relative w-full bg-zinc-800 rounded-md group">
           <Icon
             icon="uil:key-skeleton"
-            className="text-2xl text-zinc-500 shrink-0 group-focus-within:text-teal-300 transition-all absolute top-1/2 -translate-y-1/2 left-4"
+            className="text-2xl text-zinc-500 shrink-0 group-focus-within:text-lime-300 transition-all absolute top-1/2 -translate-y-1/2 left-4"
           />
           <input
             type="text"
             ref={inputRef}
             value={newKey}
             onChange={(e) => setNewKey(e.target.value)}
-            className="bg-zinc-800 w-full p-4 pl-14 rounded-md transition-all focus:ring-2 focus:outline-none focus:ring-offset-zinc-900 focus:ring-offset-2 focus:ring-teal-300 caret-teal-300"
+            className="bg-zinc-800 w-full p-4 pl-14 rounded-md transition-all focus:ring-2 focus:outline-none focus:ring-offset-zinc-900 focus:ring-offset-2 focus:ring-lime-300 caret-lime-300"
             placeholder="New Key"
           />
         </div>
       </div>
       <button
-        className="bg-teal-300 p-4 mt-8 rounded-md transition-all w-full flex items-center justify-center gap-2 uppercase text-zinc-900 font-semibold hover:bg-teal-400 tracking-widest"
+        className="bg-lime-300 p-4 mt-8 rounded-md transition-all w-full flex items-center justify-center gap-2 uppercase text-zinc-900 font-semibold hover:bg-lime-400 tracking-widest"
         onClick={() => {
           onSubmit();
         }}

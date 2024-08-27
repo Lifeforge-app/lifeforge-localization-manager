@@ -71,7 +71,7 @@ const LocaleAdmin = (): React.ReactElement => {
           <SearchBar />
           <MainList />
           <button
-            className="bg-teal-300 p-4 rounded-md mt-8 w-full text-zinc-900 font-medium hover:bg-teal-400 text-lg"
+            className="bg-lime-300 p-4 rounded-md mt-8 w-full text-zinc-900 font-medium hover:bg-lime-400 text-lg"
             onClick={saveLocales}
           >
             Save
@@ -88,7 +88,7 @@ const LocaleAdmin = (): React.ReactElement => {
           </p>
           <a
             href={import.meta.env.VITE_FRONTEND_URL}
-            className="bg-teal-300 p-4 px-6 mt-16 rounded-md transition-all flex items-center justify-center gap-2 uppercase text-zinc-900 font-semibold hover:bg-teal-400 tracking-widest"
+            className="bg-lime-300 p-4 px-6 mt-16 rounded-md transition-all flex items-center justify-center gap-2 uppercase text-zinc-900 font-semibold hover:bg-lime-400 tracking-widest"
           >
             <Icon icon="tabler:hammer" className="text-2xl" />
             Go to System

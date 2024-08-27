@@ -46,7 +46,7 @@ function TranslationInput({ item }: { item: Record<string, any> }) {
         </div>
         <div className="flex w-3/4 items-center gap-2">
           <input
-            className=" bg-zinc-800 w-full p-4 border border-zinc-700 rounded-md transition-all focus:ring-2 focus:outline-none focus:ring-offset-zinc-900 focus:ring-offset-2 focus:ring-teal-300 caret-teal-300"
+            className=" bg-zinc-800 w-full p-4 border border-zinc-700 rounded-md transition-all focus:ring-2 focus:outline-none focus:ring-offset-zinc-900 focus:ring-offset-2 focus:ring-lime-300 caret-lime-300"
             type="text"
             value={innerContent}
             onChange={(e) => setInnerContent(e.target.value)}
@@ -56,7 +56,7 @@ function TranslationInput({ item }: { item: Record<string, any> }) {
             onClick={() => {
               setRenameKeyModalOpen(item.text);
             }}
-            className="bg-teal-300 p-4 rounded-md text-zinc-900 font-medium hover:bg-teal-400 transition-all text-lg"
+            className="bg-lime-300 p-4 rounded-md text-zinc-900 font-medium hover:bg-lime-400 transition-all text-lg"
           >
             <Icon icon="tabler:edit" className="text-xl" />
           </button>
