@@ -18,7 +18,7 @@ function RenameKeyModal(): React.ReactElement {
     }
 
     await axios.patch(
-      "https://lifeforge-api-proxy.onrender.com/locales",
+      `${import.meta.env.VITE_API_HOST}/locales`,
       {
         oldKey: renameKeyModalOpen,
         newKey: newKey,

@@ -35,7 +35,7 @@ function AddTranslationModal(): React.ReactElement {
       return;
     }
 
-    await axios.post("https://lifeforge-api-proxy.onrender.com/locales", data, {
+    await axios.post(`${import.meta.env.VITE_API_HOST}/locales`, data, {
       headers: {
         "Content-Type": "application/json",
         Authorization:
@@ -61,7 +61,7 @@ function AddTranslationModal(): React.ReactElement {
 
     setAiGenerating(true);
     const response = await axios.post(
-      "https://lifeforge-api-proxy.onrender.com/locales/ai-generate",
+      `${import.meta.env.VITE_API_HOST}/locales/ai-generate`,
       { key: data.key },
       {
         headers: {

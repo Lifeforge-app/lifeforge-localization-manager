@@ -107,7 +107,7 @@ export default function LocaleProvider({
 
   async function saveLocales() {
     await axios.put(
-      `https://lifeforge-api-proxy.onrender.com/locales/${selectedLanguageRef.current}`,
+      `${import.meta.env.VITE_API_HOST}/locales/${selectedLanguageRef.current}`,
       {
         data: localesRef.current,
       },
@@ -124,7 +124,7 @@ export default function LocaleProvider({
 
   async function fetchLocales() {
     const response = await fetch(
-      `https://lifeforge-api-proxy.onrender.com/locales/${selectedLanguage}`
+      `${import.meta.env.VITE_API_HOST}/locales/${selectedLanguage}`
     ).then((res) => res.json());
     setLocales(response);
   }
