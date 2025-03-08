@@ -1,15 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import "react-nestable/dist/styles/index.css";
-import { LocaleContext } from "./providers/LocaleProvider";
-import Header from "./components/Header";
-import MainList from "./components/MainList";
-import RenameKeyModal from "./components/RenameKeyModal";
-import SearchBar from "./components/SearchBar";
+import "./i18n";
 import { Icon } from "@iconify/react/dist/iconify.js";
+import MainContent from "./MainContent";
 
 const LocaleAdmin = (): React.ReactElement => {
-  const { saveLocales } = useContext(LocaleContext);
   const [isAuthed, setIsAuthed] = useState(false);
 
   const failAuth = () => {
@@ -22,6 +18,10 @@ const LocaleAdmin = (): React.ReactElement => {
       /(?:(?:^|.*;\s*)token\s*=\s*([^;]*).*$)|^.*$/,
       "$1"
     );
+
+    if (!token) {
+      failAuth();
+    }
 
     const res = await fetch(
       `${import.meta.env.VITE_API_HOST}/user/auth/verify`,
@@ -65,19 +65,8 @@ const LocaleAdmin = (): React.ReactElement => {
 
   return (
     <main className="w-full min-h-dvh bg-zinc-950 flex flex-col text-zinc-100 p-24">
-      <Header />
       {isAuthed ? (
-        <>
-          <SearchBar />
-          <MainList />
-          <button
-            className="bg-lime-300 p-4 rounded-md mt-8 w-full text-zinc-900 font-medium hover:bg-lime-400 text-lg"
-            onClick={saveLocales}
-          >
-            Save
-          </button>
-          <RenameKeyModal />
-        </>
+        <MainContent />
       ) : (
         <div className="w-full h-full flex flex-1 items-center flex-col justify-center">
           <Icon icon="tabler:lock-access" className="text-9xl mb-4" />
