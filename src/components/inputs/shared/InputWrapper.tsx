@@ -39,7 +39,7 @@ function InputWrapper({
   return (
     <div
       className={clsx(
-        "group relative flex shrink-0 items-center gap-1 rounded-t-lg border-b-2 border-zinc-500 bg-zinc-200/50 pl-6 shadow-custom transition-all focus-within:!border-lime-400 hover:bg-zinc-200",
+        "group relative flex shrink-0 items-center gap-1 rounded-t-lg border-b-2 border-zinc-500 bg-zinc-200/50 pl-6 shadow-custom transition-all focus-within:border-lime-400! hover:bg-zinc-200",
         darker ? componentBgLighterWithHover : componentBgWithHover,
         className,
         disabled ? "pointer-events-none! opacity-50" : "cursor-text"

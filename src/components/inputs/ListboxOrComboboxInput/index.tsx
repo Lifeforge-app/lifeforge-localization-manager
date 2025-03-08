@@ -18,7 +18,7 @@ interface IGeneralProps {
   children: React.ReactNode;
   customActive?: boolean;
   required?: boolean;
-  namespace: string;
+  namespace: string | false;
   tKey?: string;
 }
 
@@ -51,7 +51,7 @@ function ListboxOrComboboxInput(
     namespace,
     tKey = "",
   } = props;
-  const { t } = useTranslation(namespace);
+  const { t } = useTranslation(namespace ? namespace : undefined);
 
   switch (type) {
     case "listbox":
@@ -72,12 +72,21 @@ function ListboxOrComboboxInput(
               icon={icon}
             />
             <InputLabel
-              isListbox
+              isListboxOrCombobox
               active={
                 (value !== null && value.length !== 0) || customActive === true
               }
               label={t(
-                [tKey, "inputs", toCamelCase(name)].filter((e) => e).join(".")
+                namespace !== false
+                  ? t([
+                      [tKey, "inputs", toCamelCase(name), "label"]
+                        .filter((e) => e)
+                        .join("."),
+                      [tKey, "inputs", toCamelCase(name)]
+                        .filter((e) => e)
+                        .join("."),
+                    ])
+                  : name
               )}
               required={required === true}
             />
@@ -112,7 +121,7 @@ function ListboxOrComboboxInput(
               icon={icon}
             />
             <InputLabel
-              isListbox
+              isListboxOrCombobox
               active={
                 (value !== null && value.length !== 0) || customActive === true
               }

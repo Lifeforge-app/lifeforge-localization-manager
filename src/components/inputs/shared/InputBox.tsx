@@ -49,9 +49,11 @@ function InputBox({
       <input
         ref={(ref) => {
           if (reference !== undefined) {
+            // @ts-expect-error - lol
             reference.current = ref;
           }
           if (inputRef !== undefined) {
+            // @ts-expect-error - lol
             inputRef.current = ref;
           }
           innerRef.current = ref;
