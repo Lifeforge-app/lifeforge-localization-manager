@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from "react";
-import ModalHeader from "../../components/modals/ModalHeader";
-import ModalWrapper from "../../components/modals/ModalWrapper";
+import { Icon } from "@iconify/react/dist/iconify.js";
+import fetchAPI from "../../utils/fetchAPI";
 import {
+  ModalWrapper,
+  ModalHeader,
+  TextInput,
   ListboxOrComboboxInput,
   ListboxOrComboboxOption,
-  TextInput,
-} from "../../components/inputs";
-import { Icon } from "@iconify/react/dist/iconify.js";
-import Button from "../../components/Button";
-import fetchAPI from "../../utils/fetchAPI";
+  Button,
+} from "@lifeforge/ui";
 
 const TYPES = [
   ["tabler:folder", "Folder"],

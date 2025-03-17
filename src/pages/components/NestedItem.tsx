@@ -3,7 +3,7 @@ import { Icon } from "@iconify/react/dist/iconify.js";
 import React, { useState } from "react";
 import LocaleInput from "./LocaleInput";
 import { isFolder } from "../../utils/locales";
-import Button from "../../components/Button";
+import { Button } from "@lifeforge/ui";
 
 function NestedItem({
   name,
@@ -70,7 +70,7 @@ function NestedItem({
                 });
               }}
               loading={suggestionsLoading}
-              variant="no-bg"
+              variant="plain"
               icon="mage:stars-c"
               className="p-2!"
             />
@@ -82,7 +82,7 @@ function NestedItem({
                 e.stopPropagation();
                 onCreateEntry(path.join("."));
               }}
-              variant="no-bg"
+              variant="plain"
               icon="tabler:plus"
               className="p-2!"
             />
@@ -93,7 +93,7 @@ function NestedItem({
               e.stopPropagation();
               onRenameEntry(path.join("."));
             }}
-            variant="no-bg"
+            variant="plain"
             icon="tabler:pencil"
             className="p-2!"
           />
@@ -103,7 +103,7 @@ function NestedItem({
               e.stopPropagation();
               onDeleteEntry(path.join("."));
             }}
-            variant="no-bg"
+            variant="plain"
             icon="tabler:trash"
             className="p-2!"
             isRed

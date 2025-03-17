@@ -3,18 +3,16 @@ import { Icon } from "@iconify/react/dist/iconify.js";
 import React, { useCallback, useEffect, useState } from "react";
 import NamespaceSelector from "./components/NamespaceSelector";
 import LocaleEditor from "./components/LocaleEditor";
-import Button from "../components/Button";
 import fetchAPI from "../utils/fetchAPI";
-import { SearchInput } from "../components/inputs";
 import { useDebounce } from "@uidotdev/usehooks";
 import { useTranslation } from "react-i18next";
 import CreateEntryModal from "./components/CreateEntryModal";
-import EmptyStateScreen from "../components/screens/EmptyStateScreen";
+import { Button, EmptyStateScreen, SearchInput } from "@lifeforge/ui";
 
 function MainContent(): React.ReactElement {
   const { t } = useTranslation("utils.localeAdmin");
   const [namespace, setNamespace] = useState<
-    null | "common" | "modules" | "utils"
+    null | "common" | "core" | "modules" | "utils"
   >(null);
   const [subNamespace, setSubNamespace] = useState<string | null>(null);
   const [oldLocales, setOldLocales] = useState<
@@ -266,7 +264,7 @@ function MainContent(): React.ReactElement {
               tProps={{
                 item: t("items.entry"),
               }}
-              variant="no-bg"
+              variant="plain"
               onClick={() => {
                 setTargetEntry("");
                 setCreateEntryModalOpen(true);
@@ -319,11 +317,13 @@ function MainContent(): React.ReactElement {
           />
         </div>
       ) : (
-        <EmptyStateScreen
-          icon={namespace ? "tabler:cube-off" : "tabler:apps-off"}
-          name={namespace ? "subNamespace" : "namespace"}
-          namespace="utils.localeAdmin"
-        />
+        <div className="flex-1 flex-center">
+          <EmptyStateScreen
+            icon={namespace ? "tabler:cube-off" : "tabler:apps-off"}
+            name={namespace ? "subNamespace" : "namespace"}
+            namespace="utils.localeAdmin"
+          />
+        </div>
       )}
       <CreateEntryModal
         isOpen={createEntryModalOpen}

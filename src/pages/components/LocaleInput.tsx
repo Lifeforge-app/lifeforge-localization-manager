@@ -1,6 +1,7 @@
+import { TextInput } from "@lifeforge/ui";
 import React, { useMemo } from "react";
-import { TextInput } from "../../components/inputs";
 import { useTranslation } from "react-i18next";
+import { toCamelCase } from "../../utils/strings";
 
 const LANG_FLAG = {
   en: "uk",
@@ -39,8 +40,8 @@ function LocaleInput({
       placeholder={t(`inputs.translationPlaceholder`, {
         key: path.join("."),
       })}
-      name={`languages.${name}`}
-      namespace="utils.localeAdmin"
+      name={t(`inputs.languages.${toCamelCase(name)}`)}
+      namespace={false}
       value={value}
       setValue={(value) => {
         setValue(name, path, value);

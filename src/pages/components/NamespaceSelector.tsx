@@ -1,11 +1,11 @@
 import React from "react";
+import { useTranslation } from "react-i18next";
+import useAPIQuery from "../../hooks/useAPIQuery";
 import {
   ListboxOrComboboxInput,
   ListboxOrComboboxOption,
-} from "../../components/inputs";
-import QueryWrapper from "../../components/screens/QueryWrapper";
-import { useTranslation } from "react-i18next";
-import useAPIQuery from "../../hooks/useAPIQuery";
+  QueryWrapper,
+} from "@lifeforge/ui";
 
 function NamespaceSelector({
   namespace,
@@ -14,8 +14,8 @@ function NamespaceSelector({
   setSubNamespace,
   showWarning,
 }: {
-  namespace: "common" | "modules" | "utils" | null;
-  setNamespace: (value: "common" | "modules" | "utils" | null) => void;
+  namespace: "common" | "core" | "modules" | "utils" | null;
+  setNamespace: (value: "common" | "core" | "modules" | "utils" | null) => void;
   subNamespace: string | null;
   setSubNamespace: (value: string | null) => void;
   showWarning: boolean;
@@ -54,7 +54,7 @@ function NamespaceSelector({
             </div>
           }
         >
-          {["common", "modules", "utils"].map((ns) => (
+          {["common", "core", "modules", "utils"].map((ns) => (
             <ListboxOrComboboxOption
               key={ns}
               value={ns}

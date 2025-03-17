@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useMemo } from "react";
-import APIFallbackComponent from "../../components/screens/APIComponentWithFallback";
 import { isFolder } from "../../utils/locales";
 import NestedItem from "./NestedItem";
+import { APIFallbackComponent } from "@lifeforge/ui";
 
 function LocaleEditor({
   oldLocales,

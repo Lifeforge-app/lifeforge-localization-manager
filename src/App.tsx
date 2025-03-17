@@ -4,8 +4,8 @@ import "react-nestable/dist/styles/index.css";
 import "./i18n";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import MainContent from "./pages/MainContent";
-import LoadingScreen from "./components/screens/LoadingScreen";
 import { useTranslation } from "react-i18next";
+import { LifeforgeUIProvider, LoadingScreen } from "@lifeforge/ui";
 
 const LocaleAdmin = (): React.ReactElement => {
   const { i18n } = useTranslation();
@@ -68,29 +68,38 @@ const LocaleAdmin = (): React.ReactElement => {
   }, []);
 
   return (
-    <main className="w-full min-h-dvh bg-zinc-950 flex flex-col text-zinc-100 p-24">
-      <Suspense fallback={<LoadingScreen />}>
-        {isAuthed ? (
-          <MainContent />
-        ) : (
-          <div className="w-full h-full flex flex-1 items-center flex-col justify-center">
-            <Icon icon="tabler:lock-access" className="text-9xl mb-4" />
-            <h2 className="text-4xl">Unauthorized Personnel</h2>
-            <p className="text-lg text-zinc-500 text-center mt-4">
-              Please authenticate through single sign-on (SSO) in the system to
-              access the locale editor.
-            </p>
-            <a
-              href={import.meta.env.VITE_FRONTEND_URL}
-              className="bg-lime-300 p-4 px-6 mt-16 rounded-md transition-all flex items-center justify-center gap-2 uppercase text-zinc-900 font-semibold hover:bg-lime-400 tracking-widest"
-            >
-              <Icon icon="tabler:hammer" className="text-2xl" />
-              Go to System
-            </a>
-          </div>
-        )}
-      </Suspense>
-    </main>
+    <LifeforgeUIProvider
+      personalization={{
+        bgTemp: "zinc",
+        theme: "dark",
+        language: i18n.language,
+        themeColor: "lime",
+      }}
+    >
+      <main className="w-full theme-lime min-h-dvh bg-zinc-950 flex flex-col text-zinc-100 p-24">
+        <Suspense fallback={<LoadingScreen />}>
+          {isAuthed ? (
+            <MainContent />
+          ) : (
+            <div className="w-full h-full flex flex-1 items-center flex-col justify-center">
+              <Icon icon="tabler:lock-access" className="text-9xl mb-4" />
+              <h2 className="text-4xl">Unauthorized Personnel</h2>
+              <p className="text-lg text-zinc-500 text-center mt-4">
+                Please authenticate through single sign-on (SSO) in the system
+                to access the locale editor.
+              </p>
+              <a
+                href={import.meta.env.VITE_FRONTEND_URL}
+                className="bg-lime-300 p-4 px-6 mt-16 rounded-md transition-all flex items-center justify-center gap-2 uppercase text-zinc-900 font-semibold hover:bg-lime-400 tracking-widest"
+              >
+                <Icon icon="tabler:hammer" className="text-2xl" />
+                Go to System
+              </a>
+            </div>
+          )}
+        </Suspense>
+      </main>
+    </LifeforgeUIProvider>
   );
 };
 
