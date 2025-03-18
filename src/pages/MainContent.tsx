@@ -12,7 +12,7 @@ import { Button, EmptyStateScreen, SearchInput } from "@lifeforge/ui";
 function MainContent(): React.ReactElement {
   const { t } = useTranslation("utils.localeAdmin");
   const [namespace, setNamespace] = useState<
-    null | "common" | "core" | "modules" | "utils"
+    null | "common" | "core" | "apps" | "utils"
   >(null);
   const [subNamespace, setSubNamespace] = useState<string | null>(null);
   const [oldLocales, setOldLocales] = useState<

@@ -14,8 +14,8 @@ function NamespaceSelector({
   setSubNamespace,
   showWarning,
 }: {
-  namespace: "common" | "core" | "modules" | "utils" | null;
-  setNamespace: (value: "common" | "core" | "modules" | "utils" | null) => void;
+  namespace: "common" | "core" | "apps" | "utils" | null;
+  setNamespace: (value: "common" | "core" | "apps" | "utils" | null) => void;
   subNamespace: string | null;
   setSubNamespace: (value: string | null) => void;
   showWarning: boolean;
@@ -54,7 +54,7 @@ function NamespaceSelector({
             </div>
           }
         >
-          {["common", "core", "modules", "utils"].map((ns) => (
+          {["common", "core", "apps", "utils"].map((ns) => (
             <ListboxOrComboboxOption
               key={ns}
               value={ns}
