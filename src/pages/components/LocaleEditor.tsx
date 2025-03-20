@@ -2,7 +2,7 @@
 import React, { useMemo } from "react";
 import { isFolder } from "../../utils/locales";
 import NestedItem from "./NestedItem";
-import { APIFallbackComponent } from "@lifeforge/ui";
+import { ErrorScreen, LoadingScreen } from "@lifeforge/ui";
 
 function LocaleEditor({
   oldLocales,
@@ -87,42 +87,46 @@ function LocaleEditor({
     return final;
   }, [locales]);
 
+  if (oldLocales === "loading" || locales === "loading") {
+    return <LoadingScreen />;
+  }
+
+  if (oldLocales === "error" || locales === "error") {
+    return <ErrorScreen message="Failed to fetch locales" />;
+  }
+
   return (
-    <APIFallbackComponent data={locales}>
-      {() => (
-        <ul>
-          {Object.entries(reconstructedLocales)
-            .sort((a, b) => {
-              const aIsFolder = isFolder(a[1]);
-              const bIsFolder = isFolder(b[1]);
+    <ul>
+      {Object.entries(reconstructedLocales)
+        .sort((a, b) => {
+          const aIsFolder = isFolder(a[1]);
+          const bIsFolder = isFolder(b[1]);
 
-              if (aIsFolder === bIsFolder) {
-                return a[0].localeCompare(b[0]);
-              }
+          if (aIsFolder === bIsFolder) {
+            return a[0].localeCompare(b[0]);
+          }
 
-              return aIsFolder ? -1 : 1;
-            })
-            .filter(([key]) => searchQuery.includes(key) || searchQuery === "")
-            .map(([key, value]) => (
-              <NestedItem
-                key={key}
-                name={key}
-                value={value}
-                path={[key]}
-                setValue={setValue}
-                changedKeys={changedKeys}
-                setChangedKeys={setChangedKeys}
-                oldLocales={oldLocales}
-                searchQuery={searchQuery}
-                onCreateEntry={onCreateEntry}
-                onRenameEntry={onRenameEntry}
-                onDeleteEntry={onDeleteEntry}
-                fetchSuggestions={fetchSuggestions}
-              />
-            ))}
-        </ul>
-      )}
-    </APIFallbackComponent>
+          return aIsFolder ? -1 : 1;
+        })
+        .filter(([key]) => searchQuery.includes(key) || searchQuery === "")
+        .map(([key, value]) => (
+          <NestedItem
+            key={key}
+            name={key}
+            value={value}
+            path={[key]}
+            setValue={setValue}
+            changedKeys={changedKeys}
+            setChangedKeys={setChangedKeys}
+            oldLocales={oldLocales}
+            searchQuery={searchQuery}
+            onCreateEntry={onCreateEntry}
+            onRenameEntry={onRenameEntry}
+            onDeleteEntry={onDeleteEntry}
+            fetchSuggestions={fetchSuggestions}
+          />
+        ))}
+    </ul>
   );
 }
 
