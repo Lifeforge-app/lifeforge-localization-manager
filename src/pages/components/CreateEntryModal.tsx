@@ -179,6 +179,13 @@ function CreateEntryModal({
           value={name}
           setValue={setName}
           darker
+          onKeyDown={(e) => {
+            if (e.key === "Enter") {
+              e.preventDefault();
+              onSubmit();
+            }
+          }
+        }
           placeholder="nameOfTheEntry"
         />
       </div>
