@@ -46,7 +46,7 @@ function CreateEntryModal({
 
     try {
       await fetchAPI(
-        `/locales/create/${selectedType}/${target[0]}/${target[1]}`,
+        `/locales/manager/${selectedType}/${target[0]}/${target[1]}`,
         {
           method: "POST",
           body: {
@@ -184,8 +184,7 @@ function CreateEntryModal({
               e.preventDefault();
               onSubmit();
             }
-          }
-        }
+          }}
           placeholder="nameOfTheEntry"
         />
       </div>

@@ -22,7 +22,7 @@ function NamespaceSelector({
 }): React.ReactElement {
   const { t } = useTranslation("utils.localeAdmin");
   const subNamespacesQuery = useAPIQuery<string[]>(
-    `/locales/list/${namespace}`,
+    `/locales/manager/${namespace}`,
     ["namespace", namespace],
     !!namespace
   );

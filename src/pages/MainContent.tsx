@@ -47,7 +47,7 @@ function MainContent(): React.ReactElement {
         })
       );
 
-      await fetchAPI(`/locales/sync/${namespace}/${subNamespace}`, {
+      await fetchAPI(`/locales/manager/sync/${namespace}/${subNamespace}`, {
         method: "POST",
         body: {
           data,
@@ -86,8 +86,8 @@ function MainContent(): React.ReactElement {
     }
 
     try {
-      await fetchAPI(`/locales/rename/${namespace}/${subNamespace}`, {
-        method: "POST",
+      await fetchAPI(`/locales/manager/${namespace}/${subNamespace}`, {
+        method: "PATCH",
         body: {
           path,
           newName,
@@ -133,8 +133,8 @@ function MainContent(): React.ReactElement {
     }
 
     try {
-      await fetchAPI(`/locales/delete/${namespace}/${subNamespace}`, {
-        method: "POST",
+      await fetchAPI(`/locales/manager/${namespace}/${subNamespace}`, {
+        method: "DELETE",
         body: {
           path,
         },
@@ -177,7 +177,7 @@ function MainContent(): React.ReactElement {
 
     try {
       const data = await fetchAPI<Record<string, string>>(
-        `/locales/suggestions/${namespace}/${subNamespace}`,
+        `/locales/manager/suggestions/${namespace}/${subNamespace}`,
         {
           method: "POST",
           body: {
@@ -225,7 +225,7 @@ function MainContent(): React.ReactElement {
     setLocales("loading");
     try {
       const data = await fetchAPI<Record<string, any>>(
-        `/locales/list/${namespace}/${subNamespace}`
+        `/locales/manager/${namespace}/${subNamespace}`
       );
       setLocales(data);
       setOldLocales(JSON.parse(JSON.stringify(data)));
