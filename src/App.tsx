@@ -45,7 +45,7 @@ const LocaleAdmin = (): React.ReactElement => {
 
     if (data.state === "success") {
       setIsAuthed(true);
-      i18n.changeLanguage(data.userData.language);
+      i18n.changeLanguage(data.data.userData.language);
     } else {
       failAuth();
     }
