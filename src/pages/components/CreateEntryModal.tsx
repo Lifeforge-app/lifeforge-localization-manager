@@ -1,100 +1,101 @@
-import React, { useEffect, useState } from "react";
-import { Icon } from "@iconify/react/dist/iconify.js";
-import fetchAPI from "../../utils/fetchAPI";
+import { Icon } from '@iconify/react/dist/iconify.js'
 import {
-  ModalWrapper,
-  ModalHeader,
-  TextInput,
+  Button,
   ListboxOrComboboxInput,
   ListboxOrComboboxOption,
-  Button,
-} from "@lifeforge/ui";
+  ModalHeader,
+  ModalWrapper,
+  TextInput
+} from '@lifeforge/ui'
+import React, { useEffect, useState } from 'react'
+
+import fetchAPI from '../../utils/fetchAPI'
 
 const TYPES = [
-  ["tabler:folder", "Folder"],
-  ["tabler:file-text", "Entry"],
-];
+  ['tabler:folder', 'Folder'],
+  ['tabler:file-text', 'Entry']
+]
 
 function CreateEntryModal({
   isOpen,
   onClose,
   target,
   setLocales,
-  setOldLocales,
+  setOldLocales
 }: {
-  isOpen: boolean;
-  onClose: () => void;
-  target: [string, string, string];
+  isOpen: boolean
+  onClose: () => void
+  target: [string, string, string]
   setLocales: React.Dispatch<
-    React.SetStateAction<Record<string, any> | "loading" | "error">
-  >;
+    React.SetStateAction<Record<string, any> | 'loading' | 'error'>
+  >
   setOldLocales: React.Dispatch<
-    React.SetStateAction<Record<string, any> | "loading" | "error">
-  >;
+    React.SetStateAction<Record<string, any> | 'loading' | 'error'>
+  >
 }): React.ReactElement {
-  const [selectedType, setSelectedType] = useState<"folder" | "entry">("entry");
-  const [name, setName] = useState("");
-  const [loading, setLoading] = useState(false);
+  const [selectedType, setSelectedType] = useState<'folder' | 'entry'>('entry')
+  const [name, setName] = useState('')
+  const [loading, setLoading] = useState(false)
 
   async function onSubmit() {
     if (!name.trim()) {
-      alert("Name is required");
-      return;
+      alert('Name is required')
+      return
     }
 
-    setLoading(true);
+    setLoading(true)
 
     try {
       await fetchAPI(
         `/locales/manager/${selectedType}/${target[0]}/${target[1]}`,
         {
-          method: "POST",
+          method: 'POST',
           body: {
-            path: [target[2], name].filter(Boolean).join("."),
-          },
+            path: [target[2], name].filter(Boolean).join('.')
+          }
         }
-      );
+      )
 
-      onClose();
+      onClose()
 
-      [setLocales, setOldLocales].forEach((e) =>
-        e((prev) => {
-          if (typeof prev === "string") {
-            return prev;
+      ;[setLocales, setOldLocales].forEach(e =>
+        e(prev => {
+          if (typeof prev === 'string') {
+            return prev
           }
 
-          const newData = JSON.parse(JSON.stringify(prev));
+          const newData = JSON.parse(JSON.stringify(prev))
 
           for (const lng in newData) {
-            let targetObject = newData[lng];
-            const path = target[2].split(".");
+            let targetObject = newData[lng]
+            const path = target[2].split('.')
             for (let i = 0; i < path.length; i++) {
               if (!targetObject[path[i]]) {
-                targetObject[path[i]] = {};
+                targetObject[path[i]] = {}
               }
 
-              targetObject = targetObject[path[i]];
+              targetObject = targetObject[path[i]]
             }
 
-            targetObject[name] = selectedType === "folder" ? {} : "";
+            targetObject[name] = selectedType === 'folder' ? {} : ''
           }
 
-          return newData;
+          return newData
         })
-      );
+      )
     } catch {
-      alert("Failed to create entry");
+      alert('Failed to create entry')
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
   }
 
   useEffect(() => {
     if (isOpen) {
-      setName("");
-      setSelectedType("entry");
+      setName('')
+      setSelectedType('entry')
     }
-  }, [isOpen]);
+  }, [isOpen])
 
   return (
     <ModalWrapper isOpen={isOpen} minWidth="40rem">
@@ -132,7 +133,7 @@ function CreateEntryModal({
           namespace="utils.localeAdmin"
           icon="tabler:folder"
           className="w-full"
-          value={target[2] || "root"}
+          value={target[2] || 'root'}
           setValue={() => {}}
           disabled
           darker
@@ -145,16 +146,14 @@ function CreateEntryModal({
           icon="tabler:category-2"
           className="w-full"
           value={target[0]}
-          setValue={(value) => {
-            setSelectedType(value.toLowerCase() as "folder" | "entry");
+          setValue={value => {
+            setSelectedType(value.toLowerCase() as 'folder' | 'entry')
           }}
           buttonContent={
             <div className="flex items-center gap-2">
               <Icon
                 icon={
-                  TYPES.find(
-                    (type) => type[1].toLowerCase() === selectedType
-                  )![0]
+                  TYPES.find(type => type[1].toLowerCase() === selectedType)![0]
                 }
                 className="size-4"
               />
@@ -162,7 +161,7 @@ function CreateEntryModal({
             </div>
           }
         >
-          {TYPES.map((type) => (
+          {TYPES.map(type => (
             <ListboxOrComboboxOption
               key={type[1]}
               value={type[1]}
@@ -179,10 +178,10 @@ function CreateEntryModal({
           value={name}
           setValue={setName}
           darker
-          onKeyDown={(e) => {
-            if (e.key === "Enter") {
-              e.preventDefault();
-              onSubmit();
+          onKeyDown={e => {
+            if (e.key === 'Enter') {
+              e.preventDefault()
+              onSubmit()
             }
           }}
           placeholder="nameOfTheEntry"
@@ -197,7 +196,7 @@ function CreateEntryModal({
         Create
       </Button>
     </ModalWrapper>
-  );
+  )
 }
 
-export default CreateEntryModal;
+export default CreateEntryModal

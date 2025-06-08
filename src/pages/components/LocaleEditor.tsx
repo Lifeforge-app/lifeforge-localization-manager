@@ -1,8 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import React, { useMemo } from "react";
-import { isFolder } from "../../utils/locales";
-import NestedItem from "./NestedItem";
-import { ErrorScreen, LoadingScreen } from "@lifeforge/ui";
+import { ErrorScreen, LoadingScreen } from '@lifeforge/ui'
+import React, { useMemo } from 'react'
+
+import { isFolder } from '../../utils/locales'
+import NestedItem from './NestedItem'
 
 function LocaleEditor({
   oldLocales,
@@ -14,101 +15,101 @@ function LocaleEditor({
   onCreateEntry,
   onRenameEntry,
   onDeleteEntry,
-  fetchSuggestions,
+  fetchSuggestions
 }: {
-  oldLocales: Record<string, any> | "loading" | "error";
-  locales: Record<string, any> | "loading" | "error";
-  setValue: (lng: string, path: string[], value: string) => void;
-  changedKeys: string[];
-  setChangedKeys: React.Dispatch<React.SetStateAction<string[]>>;
-  searchQuery: string;
-  onCreateEntry: (parent: string) => void;
-  onRenameEntry: (path: string) => void;
-  onDeleteEntry: (path: string) => void;
-  fetchSuggestions: (path: string) => Promise<void>;
+  oldLocales: Record<string, any> | 'loading' | 'error'
+  locales: Record<string, any> | 'loading' | 'error'
+  setValue: (lng: string, path: string[], value: string) => void
+  changedKeys: string[]
+  setChangedKeys: React.Dispatch<React.SetStateAction<string[]>>
+  searchQuery: string
+  onCreateEntry: (parent: string) => void
+  onRenameEntry: (path: string) => void
+  onDeleteEntry: (path: string) => void
+  fetchSuggestions: (path: string) => Promise<void>
 }): React.ReactElement {
   const reconstructedLocales = useMemo<Record<string, any>>(() => {
-    if (typeof locales === "string") {
-      return {};
+    if (typeof locales === 'string') {
+      return {}
     }
 
-    const final: Record<string, any> = {};
+    const final: Record<string, any> = {}
 
     const recursivelyReconstruct = (
       obj: Record<string, any>,
       path: string[] = []
     ) => {
-      path = path.filter(Boolean);
+      path = path.filter(Boolean)
 
       for (const key in obj) {
-        if (typeof obj[key] === "string") {
-          let target = final;
+        if (typeof obj[key] === 'string') {
+          let target = final
 
-          const toBeTraversed = path.concat(key);
+          const toBeTraversed = path.concat(key)
           for (let i = 0; i < toBeTraversed.length; i++) {
             if (!target[toBeTraversed[i]]) {
-              target[toBeTraversed[i]] = {};
+              target[toBeTraversed[i]] = {}
             }
 
-            target = target[toBeTraversed[i]];
+            target = target[toBeTraversed[i]]
           }
 
           for (const lng of Object.keys(locales)) {
-            let lngTarget = locales[lng];
+            let lngTarget = locales[lng]
 
             for (let j = 0; j < toBeTraversed.length; j++) {
-              lngTarget = lngTarget[toBeTraversed[j]];
+              lngTarget = lngTarget[toBeTraversed[j]]
             }
 
-            target[lng] = lngTarget;
+            target[lng] = lngTarget
           }
         } else {
-          if (JSON.stringify(obj[key]) === "{}") {
-            let target = final;
+          if (JSON.stringify(obj[key]) === '{}') {
+            let target = final
 
-            const toBeTraversed = path;
+            const toBeTraversed = path
             for (let i = 0; i < toBeTraversed.length; i++) {
               if (!target[toBeTraversed[i]]) {
-                target[toBeTraversed[i]] = {};
+                target[toBeTraversed[i]] = {}
               }
 
-              target = target[toBeTraversed[i]];
+              target = target[toBeTraversed[i]]
             }
 
-            target[key] = {};
+            target[key] = {}
           }
-          recursivelyReconstruct(obj[key], path.concat(key));
+          recursivelyReconstruct(obj[key], path.concat(key))
         }
       }
-    };
+    }
 
-    recursivelyReconstruct(locales.en);
+    recursivelyReconstruct(locales.en)
 
-    return final;
-  }, [locales]);
+    return final
+  }, [locales])
 
-  if (oldLocales === "loading" || locales === "loading") {
-    return <LoadingScreen />;
+  if (oldLocales === 'loading' || locales === 'loading') {
+    return <LoadingScreen />
   }
 
-  if (oldLocales === "error" || locales === "error") {
-    return <ErrorScreen message="Failed to fetch locales" />;
+  if (oldLocales === 'error' || locales === 'error') {
+    return <ErrorScreen message="Failed to fetch locales" />
   }
 
   return (
     <ul>
       {Object.entries(reconstructedLocales)
         .sort((a, b) => {
-          const aIsFolder = isFolder(a[1]);
-          const bIsFolder = isFolder(b[1]);
+          const aIsFolder = isFolder(a[1])
+          const bIsFolder = isFolder(b[1])
 
           if (aIsFolder === bIsFolder) {
-            return a[0].localeCompare(b[0]);
+            return a[0].localeCompare(b[0])
           }
 
-          return aIsFolder ? -1 : 1;
+          return aIsFolder ? -1 : 1
         })
-        .filter(([key]) => searchQuery.includes(key) || searchQuery === "")
+        .filter(([key]) => searchQuery.includes(key) || searchQuery === '')
         .map(([key, value]) => (
           <NestedItem
             key={key}
@@ -127,7 +128,7 @@ function LocaleEditor({
           />
         ))}
     </ul>
-  );
+  )
 }
 
-export default LocaleEditor;
+export default LocaleEditor

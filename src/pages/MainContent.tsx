@@ -1,273 +1,275 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Icon } from "@iconify/react/dist/iconify.js";
-import React, { useCallback, useEffect, useState } from "react";
-import NamespaceSelector from "./components/NamespaceSelector";
-import LocaleEditor from "./components/LocaleEditor";
-import fetchAPI from "../utils/fetchAPI";
-import { useDebounce } from "@uidotdev/usehooks";
-import { useTranslation } from "react-i18next";
-import CreateEntryModal from "./components/CreateEntryModal";
-import { Button, EmptyStateScreen, SearchInput } from "@lifeforge/ui";
+import { Icon } from '@iconify/react/dist/iconify.js'
+import { Button, EmptyStateScreen, SearchInput } from '@lifeforge/ui'
+import { useDebounce } from '@uidotdev/usehooks'
+import React, { useCallback, useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
+
+import fetchAPI from '../utils/fetchAPI'
+import CreateEntryModal from './components/CreateEntryModal'
+import LocaleEditor from './components/LocaleEditor'
+import NamespaceSelector from './components/NamespaceSelector'
 
 function MainContent(): React.ReactElement {
-  const { t } = useTranslation("utils.localeAdmin");
+  const { t } = useTranslation('utils.localeAdmin')
   const [namespace, setNamespace] = useState<
-    null | "common" | "core" | "apps" | "utils"
-  >(null);
-  const [subNamespace, setSubNamespace] = useState<string | null>(null);
+    null | 'common' | 'core' | 'apps' | 'utils'
+  >(null)
+  const [subNamespace, setSubNamespace] = useState<string | null>(null)
   const [oldLocales, setOldLocales] = useState<
-    Record<string, any> | "loading" | "error"
-  >({});
+    Record<string, any> | 'loading' | 'error'
+  >({})
   const [locales, setLocales] = useState<
-    Record<string, any> | "loading" | "error"
-  >({});
-  const [searchQuery, setSearchQuery] = useState("");
-  const debouncedSearchQuery = useDebounce(searchQuery, 500);
-  const [changedKeys, setChangedKeys] = useState<string[]>([]);
-  const [syncLoading, setSyncLoading] = useState(false);
-  const [targetEntry, setTargetEntry] = useState<string | null>(null);
-  const [createEntryModalOpen, setCreateEntryModalOpen] = useState(false);
+    Record<string, any> | 'loading' | 'error'
+  >({})
+  const [searchQuery, setSearchQuery] = useState('')
+  const debouncedSearchQuery = useDebounce(searchQuery, 500)
+  const [changedKeys, setChangedKeys] = useState<string[]>([])
+  const [syncLoading, setSyncLoading] = useState(false)
+  const [targetEntry, setTargetEntry] = useState<string | null>(null)
+  const [createEntryModalOpen, setCreateEntryModalOpen] = useState(false)
 
   async function syncWithServer() {
-    if (typeof locales === "string") {
-      return;
+    if (typeof locales === 'string') {
+      return
     }
 
-    setSyncLoading(true);
+    setSyncLoading(true)
     try {
       const data = Object.fromEntries(
-        changedKeys.map((key) => {
-          const final: Record<string, string> = {};
+        changedKeys.map(key => {
+          const final: Record<string, string> = {}
           for (const lng of Object.keys(locales)) {
-            final[lng] = key
-              .split(".")
-              .reduce((acc, k) => acc[k], locales[lng]);
+            final[lng] = key.split('.').reduce((acc, k) => acc[k], locales[lng])
           }
-          return [key, final];
+          return [key, final]
         })
-      );
+      )
 
       await fetchAPI(`/locales/manager/sync/${namespace}/${subNamespace}`, {
-        method: "POST",
+        method: 'POST',
         body: {
-          data,
-        },
-      });
-      setChangedKeys([]);
+          data
+        }
+      })
+      setChangedKeys([])
     } catch {
-      alert("Failed to sync with server");
+      alert('Failed to sync with server')
     }
-    setOldLocales(JSON.parse(JSON.stringify(locales)));
-    setSyncLoading(false);
+    setOldLocales(JSON.parse(JSON.stringify(locales)))
+    setSyncLoading(false)
   }
 
   function setValue(lng: string, path: string[], value: string) {
-    if (typeof locales === "string") {
-      return;
+    if (typeof locales === 'string') {
+      return
     }
-    const newData = { ...locales };
+    const newData = { ...locales }
     const target = path
       .slice(0, -1)
-      .reduce((acc, key) => acc[key], newData[lng]);
-    target[path[path.length - 1]] = value;
+      .reduce((acc, key) => acc[key], newData[lng])
+    target[path[path.length - 1]] = value
 
-    setLocales(newData);
+    setLocales(newData)
   }
 
   async function renameEntry(path: string) {
     if (changedKeys.includes(path)) {
-      alert("Please sync changes with the server before renaming");
-      return;
+      alert('Please sync changes with the server before renaming')
+      return
     }
 
-    const newName = prompt("Enter the new name");
+    const newName = prompt('Enter the new name')
     if (!newName) {
-      return;
+      return
     }
 
     try {
       await fetchAPI(`/locales/manager/${namespace}/${subNamespace}`, {
-        method: "PATCH",
+        method: 'PATCH',
         body: {
           path,
-          newName,
-        },
-      });
+          newName
+        }
+      })
 
-      [setLocales, setOldLocales].forEach((e) => {
-        e((prev) => {
-          if (typeof prev === "string") {
-            return prev;
+      ;[setLocales, setOldLocales].forEach(e => {
+        e(prev => {
+          if (typeof prev === 'string') {
+            return prev
           }
 
-          const newData = JSON.parse(JSON.stringify(prev));
+          const newData = JSON.parse(JSON.stringify(prev))
 
           for (const lng in newData) {
-            let targetObject = newData[lng];
-            const pathArray = path.split(".");
+            let targetObject = newData[lng]
+            const pathArray = path.split('.')
             for (let i = 0; i < pathArray.length; i++) {
               if (i === pathArray.length - 1) {
-                targetObject[newName] = targetObject[pathArray[i]];
-                delete targetObject[pathArray[i]];
+                targetObject[newName] = targetObject[pathArray[i]]
+                delete targetObject[pathArray[i]]
               } else {
-                targetObject = targetObject[pathArray[i]];
+                targetObject = targetObject[pathArray[i]]
               }
             }
           }
 
-          return newData;
-        });
-      });
+          return newData
+        })
+      })
     } catch {
-      alert("Failed to rename entry");
+      alert('Failed to rename entry')
     }
   }
 
   async function deleteEntry(path: string) {
-    if (typeof locales === "string") {
-      return;
+    if (typeof locales === 'string') {
+      return
     }
 
-    if (!confirm("Are you sure you want to delete this entry?")) {
-      return;
+    if (!confirm('Are you sure you want to delete this entry?')) {
+      return
     }
 
     try {
       await fetchAPI(`/locales/manager/${namespace}/${subNamespace}`, {
-        method: "DELETE",
+        method: 'DELETE',
         body: {
-          path,
-        },
-      });
+          path
+        }
+      })
 
-      [setLocales, setOldLocales].forEach((e) => {
-        e((prev) => {
-          if (typeof prev === "string") {
-            return prev;
+      ;[setLocales, setOldLocales].forEach(e => {
+        e(prev => {
+          if (typeof prev === 'string') {
+            return prev
           }
 
-          const newData = JSON.parse(JSON.stringify(prev));
+          const newData = JSON.parse(JSON.stringify(prev))
 
           for (const lng in newData) {
-            let targetObject = newData[lng];
-            const pathArray = path.split(".");
+            let targetObject = newData[lng]
+            const pathArray = path.split('.')
             for (let i = 0; i < pathArray.length; i++) {
               if (i === pathArray.length - 1) {
-                delete targetObject[pathArray[i]];
+                delete targetObject[pathArray[i]]
               } else {
-                targetObject = targetObject[pathArray[i]];
+                targetObject = targetObject[pathArray[i]]
               }
             }
           }
 
-          return newData;
-        });
-      });
+          return newData
+        })
+      })
     } catch {
-      alert("Failed to delete entry");
+      alert('Failed to delete entry')
     }
   }
 
   async function fetchSuggestions(path: string) {
-    if (typeof locales === "string") {
-      return;
+    if (typeof locales === 'string') {
+      return
     }
 
-    const hint = prompt("Enter the suggestion");
+    const hint = prompt('Enter the suggestion')
 
     try {
       const data = await fetchAPI<Record<string, string>>(
         `/locales/manager/suggestions/${namespace}/${subNamespace}`,
         {
-          method: "POST",
+          method: 'POST',
           body: {
             path,
-            hint: hint ?? "",
-          },
+            hint: hint ?? ''
+          }
         }
-      );
+      )
 
-      setLocales((prev) => {
-        if (typeof prev === "string") {
-          return prev;
+      setLocales(prev => {
+        if (typeof prev === 'string') {
+          return prev
         }
 
-        const newData = JSON.parse(JSON.stringify(prev));
+        const newData = JSON.parse(JSON.stringify(prev))
 
         for (const lng in data) {
-          let targetObject = newData[lng];
-          const pathArray = path.split(".");
+          let targetObject = newData[lng]
+          const pathArray = path.split('.')
           for (let i = 0; i < pathArray.length; i++) {
             if (i === pathArray.length - 1) {
-              targetObject[pathArray[i]] = data[lng];
+              targetObject[pathArray[i]] = data[lng]
             } else {
-              targetObject = targetObject[pathArray[i]];
+              targetObject = targetObject[pathArray[i]]
             }
           }
         }
 
-        return newData;
-      });
+        return newData
+      })
 
-      setChangedKeys((prev) => {
+      setChangedKeys(prev => {
         if (prev.includes(path)) {
-          return prev;
+          return prev
         }
 
-        return [...prev, path];
-      });
+        return [...prev, path]
+      })
     } catch {
-      alert("Failed to fetch suggestions");
+      alert('Failed to fetch suggestions')
     }
   }
 
   const fetchLocales = useCallback(async () => {
-    setLocales("loading");
+    setLocales('loading')
     try {
       const data = await fetchAPI<Record<string, any>>(
         `/locales/manager/${namespace}/${subNamespace}`
-      );
-      setLocales(data);
-      setOldLocales(JSON.parse(JSON.stringify(data)));
+      )
+      setLocales(data)
+      setOldLocales(JSON.parse(JSON.stringify(data)))
     } catch {
-      setLocales("error");
+      setLocales('error')
     }
-  }, [namespace, subNamespace]);
+  }, [namespace, subNamespace])
 
   useEffect(() => {
     if (namespace && subNamespace) {
-      fetchLocales();
+      fetchLocales()
     }
-  }, [namespace, subNamespace, fetchLocales]);
+  }, [namespace, subNamespace, fetchLocales])
 
   useEffect(() => {
-    setChangedKeys([]);
-    setSearchQuery;
-  }, [namespace, subNamespace]);
+    setChangedKeys([])
+    setSearchQuery
+  }, [namespace, subNamespace])
 
   return (
-    <div className="h-full flex flex-col flex-1">
-      <header className="w-full flex items-center justify-between">
+    <div className="flex h-full flex-1 flex-col">
+      <header className="flex w-full items-center justify-between">
         <h1 className="flex items-center gap-2">
-          <Icon icon="hugeicons:translate" className="text-5xl text-lime-400" />
+          <Icon
+            icon="mingcute:translate-line"
+            className="text-custom-400 text-5xl"
+          />
           <div>
             <div className="text-2xl font-semibold">
-              Lifeforge<span className="text-lime-400">.</span>
+              Lifeforge<span className="text-custom-400">.</span>
             </div>
-            <div className="text-zinc-500 font-medium">{t("title")}</div>
+            <div className="text-bg-500 font-medium">{t('title')}</div>
           </div>
         </h1>
-        {namespace && subNamespace && typeof locales !== "string" && (
+        {namespace && subNamespace && typeof locales !== 'string' && (
           <div className="flex items-center gap-2">
             <Button
               icon="tabler:plus"
               tProps={{
-                item: t("items.entry"),
+                item: t('items.entry')
               }}
               variant="plain"
               onClick={() => {
-                setTargetEntry("");
-                setCreateEntryModalOpen(true);
+                setTargetEntry('')
+                setCreateEntryModalOpen(true)
               }}
             >
               new
@@ -293,7 +295,7 @@ function MainContent(): React.ReactElement {
       />
 
       {namespace && subNamespace ? (
-        <div className="flex-1 h-full flex flex-col">
+        <div className="flex h-full flex-1 flex-col">
           <SearchInput
             namespace="utils.localeAdmin"
             stuffToSearch="entry"
@@ -307,9 +309,9 @@ function MainContent(): React.ReactElement {
             changedKeys={changedKeys}
             setChangedKeys={setChangedKeys}
             searchQuery={debouncedSearchQuery}
-            onCreateEntry={(parent) => {
-              setTargetEntry(parent);
-              setCreateEntryModalOpen(true);
+            onCreateEntry={parent => {
+              setTargetEntry(parent)
+              setCreateEntryModalOpen(true)
             }}
             onRenameEntry={renameEntry}
             onDeleteEntry={deleteEntry}
@@ -317,10 +319,10 @@ function MainContent(): React.ReactElement {
           />
         </div>
       ) : (
-        <div className="flex-1 flex-center">
+        <div className="flex-center flex-1">
           <EmptyStateScreen
-            icon={namespace ? "tabler:cube-off" : "tabler:apps-off"}
-            name={namespace ? "subNamespace" : "namespace"}
+            icon={namespace ? 'tabler:cube-off' : 'tabler:apps-off'}
+            name={namespace ? 'subNamespace' : 'namespace'}
             namespace="utils.localeAdmin"
           />
         </div>
@@ -328,12 +330,12 @@ function MainContent(): React.ReactElement {
       <CreateEntryModal
         isOpen={createEntryModalOpen}
         onClose={() => setCreateEntryModalOpen(false)}
-        target={[namespace ?? "", subNamespace ?? "", targetEntry ?? ""]}
+        target={[namespace ?? '', subNamespace ?? '', targetEntry ?? '']}
         setLocales={setLocales}
         setOldLocales={setOldLocales}
       />
     </div>
-  );
+  )
 }
 
-export default MainContent;
+export default MainContent

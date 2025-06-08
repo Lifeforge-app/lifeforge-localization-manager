@@ -1,9 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Icon } from "@iconify/react/dist/iconify.js";
-import React, { useState } from "react";
-import LocaleInput from "./LocaleInput";
-import { isFolder } from "../../utils/locales";
-import { Button } from "@lifeforge/ui";
+import { Icon } from '@iconify/react/dist/iconify.js'
+import { Button } from '@lifeforge/ui'
+import React, { useState } from 'react'
+
+import { isFolder } from '../../utils/locales'
+import LocaleInput from './LocaleInput'
 
 function NestedItem({
   name,
@@ -17,43 +18,43 @@ function NestedItem({
   onCreateEntry,
   onRenameEntry,
   onDeleteEntry,
-  fetchSuggestions,
+  fetchSuggestions
 }: {
-  name: string;
-  value: Record<string, any>;
-  path: string[];
-  setValue: (lng: string, path: string[], value: string) => void;
-  changedKeys: string[];
-  setChangedKeys: React.Dispatch<React.SetStateAction<string[]>>;
-  oldLocales: Record<string, any> | "loading" | "error";
-  searchQuery: string;
-  onCreateEntry: (parent: string) => void;
-  onDeleteEntry: (path: string) => void;
-  onRenameEntry: (path: string) => void;
-  fetchSuggestions: (path: string) => Promise<void>;
+  name: string
+  value: Record<string, any>
+  path: string[]
+  setValue: (lng: string, path: string[], value: string) => void
+  changedKeys: string[]
+  setChangedKeys: React.Dispatch<React.SetStateAction<string[]>>
+  oldLocales: Record<string, any> | 'loading' | 'error'
+  searchQuery: string
+  onCreateEntry: (parent: string) => void
+  onDeleteEntry: (path: string) => void
+  onRenameEntry: (path: string) => void
+  fetchSuggestions: (path: string) => Promise<void>
 }): React.ReactElement {
-  const [suggestionsLoading, setSuggestionsLoading] = useState(false);
-  const [collapsed, setCollapsed] = useState(true);
+  const [suggestionsLoading, setSuggestionsLoading] = useState(false)
+  const [collapsed, setCollapsed] = useState(true)
 
   return (
     <li
-      className={`border-l-2 shadow-md my-4 w-full ${
-        changedKeys.some((key) => key.startsWith(path.join(".")))
-          ? "border-yellow-500"
+      className={`my-4 w-full border-l-2 shadow-md ${
+        changedKeys.some(key => key.startsWith(path.join('.')))
+          ? 'border-yellow-500'
           : collapsed
-          ? "border-zinc-500"
-          : "border-zinc-100"
+            ? 'border-bg-300 dark:border-bg-500'
+            : 'border-bg-900 dark:border-bg-100'
       }`}
     >
       <button
         onClick={() => {
-          setCollapsed(!collapsed);
+          setCollapsed(!collapsed)
         }}
-        className="flex-between gap-8 w-full hover:bg-zinc-900 transition-all p-4"
+        className="flex-between hover:bg-bg-200 dark:hover:bg-bg-900 w-full gap-8 p-4 transition-all"
       >
         <code className="flex items-center gap-2">
           <Icon
-            icon={!isFolder(value) ? "tabler:file-text" : "tabler:folder"}
+            icon={!isFolder(value) ? 'tabler:file-text' : 'tabler:folder'}
             className="size-6"
           />
           {name}
@@ -61,13 +62,13 @@ function NestedItem({
         <div className="flex items-center gap-2">
           {!isFolder(value) && (
             <Button
-              onClick={(e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                setSuggestionsLoading(true);
-                fetchSuggestions(path.join(".")).finally(() => {
-                  setSuggestionsLoading(false);
-                });
+              onClick={e => {
+                e.preventDefault()
+                e.stopPropagation()
+                setSuggestionsLoading(true)
+                fetchSuggestions(path.join('.')).finally(() => {
+                  setSuggestionsLoading(false)
+                })
               }}
               loading={suggestionsLoading}
               variant="plain"
@@ -77,10 +78,10 @@ function NestedItem({
           )}
           {isFolder(value) && (
             <Button
-              onClick={(e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                onCreateEntry(path.join("."));
+              onClick={e => {
+                e.preventDefault()
+                e.stopPropagation()
+                onCreateEntry(path.join('.'))
               }}
               variant="plain"
               icon="tabler:plus"
@@ -88,20 +89,20 @@ function NestedItem({
             />
           )}
           <Button
-            onClick={(e) => {
-              e.preventDefault();
-              e.stopPropagation();
-              onRenameEntry(path.join("."));
+            onClick={e => {
+              e.preventDefault()
+              e.stopPropagation()
+              onRenameEntry(path.join('.'))
             }}
             variant="plain"
             icon="tabler:pencil"
             className="p-2!"
           />
           <Button
-            onClick={(e) => {
-              e.preventDefault();
-              e.stopPropagation();
-              onDeleteEntry(path.join("."));
+            onClick={e => {
+              e.preventDefault()
+              e.stopPropagation()
+              onDeleteEntry(path.join('.'))
             }}
             variant="plain"
             icon="tabler:trash"
@@ -110,36 +111,36 @@ function NestedItem({
           />
           <div className="p-2">
             <Icon
-              icon={collapsed ? "tabler:chevron-up" : "tabler:chevron-down"}
-              className="size-5 text-zinc-500"
+              icon={collapsed ? 'tabler:chevron-up' : 'tabler:chevron-down'}
+              className="text-bg-500 size-5"
             />
           </div>
         </div>
       </button>
       {!collapsed && (
-        <ul className="space-y-2 px-4 mt-4">
+        <ul className="mt-4 space-y-2 px-4 pb-4">
           {Object.entries(value)
             .filter(([key]) => {
               return (
-                path.concat(key).join(".").startsWith(searchQuery) ||
-                searchQuery.startsWith(path.concat(key).join("."))
-              );
+                path.concat(key).join('.').startsWith(searchQuery) ||
+                searchQuery.startsWith(path.concat(key).join('.'))
+              )
             })
             .sort((a, b) => {
-              if (typeof a[1] === "string" && typeof b[1] === "string") {
-                return 0;
+              if (typeof a[1] === 'string' && typeof b[1] === 'string') {
+                return 0
               }
-              const aIsFolder = isFolder(a[1]);
-              const bIsFolder = isFolder(b[1]);
+              const aIsFolder = isFolder(a[1])
+              const bIsFolder = isFolder(b[1])
 
               if (aIsFolder === bIsFolder) {
-                return a[0].localeCompare(b[0]);
+                return a[0].localeCompare(b[0])
               }
 
-              return aIsFolder ? -1 : 1;
+              return aIsFolder ? -1 : 1
             })
             .map(([key, value]) =>
-              typeof value === "string" ? (
+              typeof value === 'string' ? (
                 <li key={key} className="flex items-center gap-2">
                   <LocaleInput
                     name={key}
@@ -171,7 +172,7 @@ function NestedItem({
         </ul>
       )}
     </li>
-  );
+  )
 }
 
-export default NestedItem;
+export default NestedItem
