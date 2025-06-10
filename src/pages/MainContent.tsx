@@ -1,17 +1,24 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Icon } from '@iconify/react/dist/iconify.js'
-import { Button, EmptyStateScreen, SearchInput } from '@lifeforge/ui'
+import {
+  Button,
+  EmptyStateScreen,
+  SearchInput,
+  useModalStore,
+  useModalsEffect
+} from '@lifeforge/ui'
 import { useDebounce } from '@uidotdev/usehooks'
 import React, { useCallback, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import fetchAPI from '../utils/fetchAPI'
-import CreateEntryModal from './components/CreateEntryModal'
 import LocaleEditor from './components/LocaleEditor'
 import NamespaceSelector from './components/NamespaceSelector'
+import { LocaleManagerModals } from './modals'
 
 function MainContent(): React.ReactElement {
   const { t } = useTranslation('utils.localeAdmin')
+  const open = useModalStore(state => state.open)
   const [namespace, setNamespace] = useState<
     null | 'common' | 'core' | 'apps' | 'utils'
   >(null)
@@ -26,8 +33,6 @@ function MainContent(): React.ReactElement {
   const debouncedSearchQuery = useDebounce(searchQuery, 500)
   const [changedKeys, setChangedKeys] = useState<string[]>([])
   const [syncLoading, setSyncLoading] = useState(false)
-  const [targetEntry, setTargetEntry] = useState<string | null>(null)
-  const [createEntryModalOpen, setCreateEntryModalOpen] = useState(false)
 
   async function syncWithServer() {
     if (typeof locales === 'string') {
@@ -92,7 +97,6 @@ function MainContent(): React.ReactElement {
           newName
         }
       })
-
       ;[setLocales, setOldLocales].forEach(e => {
         e(prev => {
           if (typeof prev === 'string') {
@@ -138,7 +142,6 @@ function MainContent(): React.ReactElement {
           path
         }
       })
-
       ;[setLocales, setOldLocales].forEach(e => {
         e(prev => {
           if (typeof prev === 'string') {
@@ -233,6 +236,17 @@ function MainContent(): React.ReactElement {
     }
   }, [namespace, subNamespace])
 
+  const handleCreateEntryModalOpen = useCallback(
+    (targetEntry: string) => {
+      open('localeManager.createEntry', {
+        target: [namespace ?? '', subNamespace ?? '', targetEntry ?? ''],
+        setLocales,
+        setOldLocales
+      })
+    },
+    [namespace, subNamespace]
+  )
+
   useEffect(() => {
     if (namespace && subNamespace) {
       fetchLocales()
@@ -244,8 +258,10 @@ function MainContent(): React.ReactElement {
     setSearchQuery
   }, [namespace, subNamespace])
 
+  useModalsEffect(LocaleManagerModals)
+
   return (
-    <div className="flex h-full flex-1 flex-col">
+    <div className="flex h-full w-full flex-1 flex-col">
       <header className="flex w-full items-center justify-between">
         <h1 className="flex items-center gap-2">
           <Icon
@@ -268,8 +284,7 @@ function MainContent(): React.ReactElement {
               }}
               variant="plain"
               onClick={() => {
-                setTargetEntry('')
-                setCreateEntryModalOpen(true)
+                handleCreateEntryModalOpen('')
               }}
             >
               new
@@ -310,8 +325,7 @@ function MainContent(): React.ReactElement {
             setChangedKeys={setChangedKeys}
             searchQuery={debouncedSearchQuery}
             onCreateEntry={parent => {
-              setTargetEntry(parent)
-              setCreateEntryModalOpen(true)
+              handleCreateEntryModalOpen(parent)
             }}
             onRenameEntry={renameEntry}
             onDeleteEntry={deleteEntry}
@@ -327,13 +341,6 @@ function MainContent(): React.ReactElement {
           />
         </div>
       )}
-      <CreateEntryModal
-        isOpen={createEntryModalOpen}
-        onClose={() => setCreateEntryModalOpen(false)}
-        target={[namespace ?? '', subNamespace ?? '', targetEntry ?? '']}
-        setLocales={setLocales}
-        setOldLocales={setOldLocales}
-      />
     </div>
   )
 }

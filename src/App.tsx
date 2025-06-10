@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Icon } from '@iconify/react/dist/iconify.js'
-import { LoadingScreen } from '@lifeforge/ui'
+import { LoadingScreen, ModalManager } from '@lifeforge/ui'
 import React, { Suspense, useEffect, useState } from 'react'
 
 import './i18n'
@@ -9,7 +9,7 @@ import LifeforgeUIProviderWrapper from './providers/LifeforgeUIProviderWrapper'
 import PersonalizationProvider from './providers/PersonalizationProvider'
 
 const LocaleAdmin = (): React.ReactElement => {
-  const [isAuthed, setIsAuthed] = useState(false)
+  const [isAuthed, setIsAuthed] = useState<'loading' | boolean>('loading')
   const [themeConfig, setThemeConfig] = useState<{
     fontFamily: string
     theme: 'light' | 'dark' | 'system'
@@ -95,33 +95,42 @@ const LocaleAdmin = (): React.ReactElement => {
   }, [])
 
   return (
-    <PersonalizationProvider isAuthed={isAuthed} config={themeConfig}>
+    <PersonalizationProvider isAuthed={isAuthed === true} config={themeConfig}>
       <LifeforgeUIProviderWrapper>
         <main
           id="app"
-          className="bg-bg-200/50 text-bg-800 dark:bg-bg-900/50 dark:text-bg-50 flex min-h-dvh w-full flex-col p-12"
+          className="bg-bg-200/50 flex-center text-bg-800 dark:bg-bg-900/50 dark:text-bg-50 flex min-h-dvh w-full flex-col p-12"
         >
           <Suspense fallback={<LoadingScreen />}>
-            {isAuthed ? (
-              <MainContent />
-            ) : (
-              <div className="flex h-full w-full flex-1 flex-col items-center justify-center">
-                <Icon icon="tabler:lock-access" className="mb-4 text-9xl" />
-                <h2 className="text-4xl">Unauthorized Personnel</h2>
-                <p className="text-bg-500 mt-4 text-center text-lg">
-                  Please authenticate through single sign-on (SSO) in the system
-                  to access the locale editor.
-                </p>
-                <a
-                  href={import.meta.env.VITE_FRONTEND_URL}
-                  className="bg-custom-500 text-bg-900 hover:bg-custom-400 mt-16 flex items-center justify-center gap-2 rounded-md p-4 px-6 font-semibold tracking-widest uppercase transition-all"
-                >
-                  <Icon icon="tabler:hammer" className="text-2xl" />
-                  Go to System
-                </a>
-              </div>
-            )}
+            {(() => {
+              if (isAuthed === 'loading') {
+                return <LoadingScreen />
+              }
+
+              if (isAuthed === false) {
+                return (
+                  <div className="flex h-full w-full flex-1 flex-col items-center justify-center">
+                    <Icon icon="tabler:lock-access" className="mb-4 text-9xl" />
+                    <h2 className="text-4xl">Unauthorized Personnel</h2>
+                    <p className="text-bg-500 mt-4 text-center text-lg">
+                      Please authenticate through single sign-on (SSO) in the
+                      system to access the locale editor.
+                    </p>
+                    <a
+                      href={import.meta.env.VITE_FRONTEND_URL}
+                      className="bg-custom-500 text-bg-900 hover:bg-custom-400 mt-16 flex items-center justify-center gap-2 rounded-md p-4 px-6 font-semibold tracking-widest uppercase transition-all"
+                    >
+                      <Icon icon="tabler:hammer" className="text-2xl" />
+                      Go to System
+                    </a>
+                  </div>
+                )
+              }
+
+              return <MainContent />
+            })()}
           </Suspense>
+          <ModalManager />
         </main>
       </LifeforgeUIProviderWrapper>
     </PersonalizationProvider>

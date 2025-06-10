@@ -10,6 +10,7 @@
         "@tailwindcss/postcss": "^4.1.8",
         "@tanstack/react-query": "^5.80.6",
         "@uidotdev/usehooks": "^2.4.1",
+        "clsx": "^2.1.1",
         "i18next": "^24.2.3",
         "i18next-http-backend": "^3.0.2",
         "javascript-color-gradient": "^2.5.0",

@@ -4,10 +4,9 @@ import {
   ListboxOrComboboxInput,
   ListboxOrComboboxOption,
   ModalHeader,
-  ModalWrapper,
   TextInput
 } from '@lifeforge/ui'
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 
 import fetchAPI from '../../utils/fetchAPI'
 
@@ -17,21 +16,19 @@ const TYPES = [
 ]
 
 function CreateEntryModal({
-  isOpen,
   onClose,
-  target,
-  setLocales,
-  setOldLocales
+  data: { target, setLocales, setOldLocales }
 }: {
-  isOpen: boolean
   onClose: () => void
-  target: [string, string, string]
-  setLocales: React.Dispatch<
-    React.SetStateAction<Record<string, any> | 'loading' | 'error'>
-  >
-  setOldLocales: React.Dispatch<
-    React.SetStateAction<Record<string, any> | 'loading' | 'error'>
-  >
+  data: {
+    target: [string, string, string]
+    setLocales: React.Dispatch<
+      React.SetStateAction<Record<string, any> | 'loading' | 'error'>
+    >
+    setOldLocales: React.Dispatch<
+      React.SetStateAction<Record<string, any> | 'loading' | 'error'>
+    >
+  }
 }): React.ReactElement {
   const [selectedType, setSelectedType] = useState<'folder' | 'entry'>('entry')
   const [name, setName] = useState('')
@@ -57,7 +54,6 @@ function CreateEntryModal({
       )
 
       onClose()
-
       ;[setLocales, setOldLocales].forEach(e =>
         e(prev => {
           if (typeof prev === 'string') {
@@ -90,15 +86,8 @@ function CreateEntryModal({
     }
   }
 
-  useEffect(() => {
-    if (isOpen) {
-      setName('')
-      setSelectedType('entry')
-    }
-  }, [isOpen])
-
   return (
-    <ModalWrapper isOpen={isOpen} minWidth="40rem">
+    <div className="min-w-[40vw]">
       <ModalHeader
         title="entry.create"
         namespace="utils.localeAdmin"
@@ -189,13 +178,13 @@ function CreateEntryModal({
       </div>
       <Button
         icon="tabler:plus"
-        className="mt-6"
+        className="mt-6 w-full"
         loading={loading}
         onClick={onSubmit}
       >
         Create
       </Button>
-    </ModalWrapper>
+    </div>
   )
 }
 

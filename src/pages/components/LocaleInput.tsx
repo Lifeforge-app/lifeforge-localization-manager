@@ -44,6 +44,7 @@ function LocaleInput({
       name={t(`inputs.languages.${toCamelCase(name)}`)}
       namespace={false}
       value={value}
+      darker
       setValue={value => {
         setValue(name, path, value)
         if (value !== originalValue) {

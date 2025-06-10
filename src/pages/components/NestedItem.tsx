@@ -1,7 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Icon } from '@iconify/react/dist/iconify.js'
 import { Button } from '@lifeforge/ui'
-import React, { useState } from 'react'
+import clsx from 'clsx'
+import React, { useMemo, useState } from 'react'
 
 import { isFolder } from '../../utils/locales'
 import LocaleInput from './LocaleInput'
@@ -35,16 +36,41 @@ function NestedItem({
 }): React.ReactElement {
   const [suggestionsLoading, setSuggestionsLoading] = useState(false)
   const [collapsed, setCollapsed] = useState(true)
+  const filteredEntries = useMemo(
+    () =>
+      Object.entries(value)
+        .filter(([key]) => {
+          return (
+            path.concat(key).join('.').startsWith(searchQuery) ||
+            searchQuery.startsWith(path.concat(key).join('.'))
+          )
+        })
+        .sort((a, b) => {
+          if (typeof a[1] === 'string' && typeof b[1] === 'string') {
+            return 0
+          }
+          const aIsFolder = isFolder(a[1])
+          const bIsFolder = isFolder(b[1])
+
+          if (aIsFolder === bIsFolder) {
+            return a[0].localeCompare(b[0])
+          }
+
+          return aIsFolder ? -1 : 1
+        }),
+    [value, path, searchQuery]
+  )
 
   return (
     <li
-      className={`my-4 w-full border-l-2 shadow-md ${
-        changedKeys.some(key => key.startsWith(path.join('.')))
-          ? 'border-yellow-500'
-          : collapsed
-            ? 'border-bg-300 dark:border-bg-500'
-            : 'border-bg-900 dark:border-bg-100'
-      }`}
+      className={clsx(
+        'my-4 w-full border-l-2 shadow-md',
+        changedKeys.some(key => key.startsWith(path.join('.'))) &&
+          'border-yellow-500!',
+        collapsed
+          ? 'border-bg-300 dark:border-bg-500'
+          : 'border-bg-900 dark:border-bg-100 bg-bg-700/10'
+      )}
     >
       <button
         onClick={() => {
@@ -60,7 +86,18 @@ function NestedItem({
           {name}
         </code>
         <div className="flex items-center gap-2">
-          {!isFolder(value) && (
+          {isFolder(value) ? (
+            <Button
+              onClick={e => {
+                e.preventDefault()
+                e.stopPropagation()
+                onCreateEntry(path.join('.'))
+              }}
+              variant="plain"
+              icon="tabler:plus"
+              className="p-2!"
+            />
+          ) : (
             <Button
               onClick={e => {
                 e.preventDefault()
@@ -73,18 +110,6 @@ function NestedItem({
               loading={suggestionsLoading}
               variant="plain"
               icon="mage:stars-c"
-              className="p-2!"
-            />
-          )}
-          {isFolder(value) && (
-            <Button
-              onClick={e => {
-                e.preventDefault()
-                e.stopPropagation()
-                onCreateEntry(path.join('.'))
-              }}
-              variant="plain"
-              icon="tabler:plus"
               className="p-2!"
             />
           )}
@@ -119,27 +144,15 @@ function NestedItem({
       </button>
       {!collapsed && (
         <ul className="mt-4 space-y-2 px-4 pb-4">
-          {Object.entries(value)
-            .filter(([key]) => {
+          {(() => {
+            if (!filteredEntries.length) {
               return (
-                path.concat(key).join('.').startsWith(searchQuery) ||
-                searchQuery.startsWith(path.concat(key).join('.'))
+                <p className="text-bg-500 mb-4 text-center">
+                  No entries found.
+                </p>
               )
-            })
-            .sort((a, b) => {
-              if (typeof a[1] === 'string' && typeof b[1] === 'string') {
-                return 0
-              }
-              const aIsFolder = isFolder(a[1])
-              const bIsFolder = isFolder(b[1])
-
-              if (aIsFolder === bIsFolder) {
-                return a[0].localeCompare(b[0])
-              }
-
-              return aIsFolder ? -1 : 1
-            })
-            .map(([key, value]) =>
+            }
+            return filteredEntries.map(([key, value]) =>
               typeof value === 'string' ? (
                 <li key={key} className="flex items-center gap-2">
                   <LocaleInput
@@ -168,7 +181,8 @@ function NestedItem({
                   fetchSuggestions={fetchSuggestions}
                 />
               )
-            )}
+            )
+          })()}
         </ul>
       )}
     </li>
