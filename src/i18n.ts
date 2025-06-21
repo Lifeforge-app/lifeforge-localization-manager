@@ -6,8 +6,7 @@ i18n
   .use(I18NextHttpBackend)
   .use(initReactI18next)
   .init({
-    lng: 'zh-CN',
-    fallbackLng: 'en',
+    lng: 'en',
     cache: {
       enabled: true
     },
@@ -18,7 +17,7 @@ i18n
       bindI18n: 'languageChanged loaded'
     },
     cleanCode: true,
-    debug: true,
+    debug: false,
     interpolation: {
       escapeValue: false
     },
@@ -34,9 +33,7 @@ i18n
           return
         }
 
-        return `${import.meta.env.VITE_API_HOST}/locales/${
-          langs[0]
-        }/${namespaces[0].split('.').join('/')}`
+        return `${import.meta.env.VITE_API_HOST}/locales/${langs[0]}/${namespaces[0].split('.').join('/')}`
       },
       parse: (data: string) => {
         return JSON.parse(data).data

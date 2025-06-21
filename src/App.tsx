@@ -91,6 +91,8 @@ const LocaleAdmin = (): React.ReactElement => {
 
     if (document.cookie.includes('token')) {
       verifyToken()
+    } else {
+      failAuth()
     }
   }, [])
 
